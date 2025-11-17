@@ -1,0 +1,21 @@
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim-buster
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the requirements file first to leverage Docker cache
+COPY requirements.txt .
+
+# Upgrade pip and install requirements
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application's code into the container
+COPY . .
+
+# Expose the port the app runs on (good practice)
+EXPOSE 5000
+
+# Run app.py when the container launches
+CMD ["flask", "run", "--host=0.0.0.0"]
